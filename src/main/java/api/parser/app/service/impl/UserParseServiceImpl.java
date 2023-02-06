@@ -31,6 +31,7 @@ public class UserParseServiceImpl implements UserParseService {
     public static final int REQUEST_QUOTA_MAX = 25;
     public static final int DELAY_TIME = 60;
     public static final int MAX_PARAM_LENGTH = 20;
+    public static final int MIN_ANSWERED_QUESTIONS = 1;
     private final UserDtoMapper userDtoMapper;
 
     public UserParseServiceImpl(UserDtoMapper userDtoMapper) {
@@ -70,7 +71,7 @@ public class UserParseServiceImpl implements UserParseService {
 
     private List<User> filterByLocationNdAnswers(UserApiDto[] items) {
         Predicate<UserApiDto> userFilter = item -> {
-            if (item.getLocation() == null || item.getAnswerCount() < 1) {
+            if (item.getLocation() == null || item.getAnswerCount() < MIN_ANSWERED_QUESTIONS) {
                 return false;
             }
             return item.getLocation().contains(COUNTRY_MOLDOVA)
