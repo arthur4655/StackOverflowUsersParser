@@ -10,4 +10,5 @@ public class ResponseTagApiDto {
     private TagApiDto[] items;
     @SerializedName("has_more")
     private boolean hasMore;
+    private Long backoff;
 }

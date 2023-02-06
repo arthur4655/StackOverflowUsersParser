@@ -11,4 +11,5 @@ public class ResponseUserApiDto {
     private boolean hasMore;
     @SerializedName("items")
     private UserApiDto[] items;
+    private Long backoff;
 }

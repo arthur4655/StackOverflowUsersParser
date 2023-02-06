@@ -28,8 +28,8 @@ public class UserParseServiceImpl implements UserParseService {
     public static final String DOTNET_LANG = ".net";
     public static final String COUNTRY_MOLDOVA = "Moldova";
     public static final String COUNTRY_ROMANIA = "Romania";
-    public static final int REQUEST_QUOTA_MAX = 25;
-    public static final int DELAY_TIME = 60;
+    public static final int REQUEST_QUOTA_MAX = 10;
+    public static final int DELAY_TIME = 100;
     public static final int MAX_PARAM_LENGTH = 20;
     public static final int MIN_ANSWERED_QUESTIONS = 1;
     private final UserDtoMapper userDtoMapper;
@@ -52,11 +52,16 @@ public class UserParseServiceImpl implements UserParseService {
             }
             while (responseUserApiDto != null && responseUserApiDto.isHasMore()
                     && pageNumber < REQUEST_QUOTA_MAX) {
+                if (responseUserApiDto.getBackoff() != null) {
+                    long delaySec = responseUserApiDto.getBackoff() * 1000;
+                    Thread.sleep(delaySec);
+                } else {
+                    Thread.sleep(DELAY_TIME);
+                }
                 if (pageNumber > 2) {
                     users.addAll(filterByLocationNdAnswers(responseUserApiDto.getItems()));
                 }
                 responseUserApiDto = requestApi.requestToUserApi(pageNumber++).execute().body();
-                Thread.sleep(DELAY_TIME);
             }
 
         } catch (IOException | InterruptedException e) {
@@ -97,11 +102,16 @@ public class UserParseServiceImpl implements UserParseService {
                 }
                 while (tags.body() != null && tags.body().isHasMore()
                             && pageNumber < REQUEST_QUOTA_MAX) {
+                    if (tags.body().getBackoff() != null) {
+                        long delaySec = tags.body().getBackoff() * 1000;
+                        Thread.sleep(delaySec);
+                    } else {
+                        Thread.sleep(DELAY_TIME);
+                    }
                     if (pageNumber > 2) {
                         usersTags.putAll(collectTags(tags.body()));
                     }
                     tags = requestConf.requestToTagApi(usersIds, pageNumber++).execute();
-                    Thread.sleep(DELAY_TIME);
                 }
 
             } catch (IOException | InterruptedException e) {
