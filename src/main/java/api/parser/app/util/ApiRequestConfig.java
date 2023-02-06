@@ -17,5 +17,6 @@ public interface ApiRequestConfig {
     Call<ResponseUserApiDto> requestToUserApi(@Query("page") Long page);
 
     @GET(TAG_URL_VALUE)
-    Call<ResponseTagApiDto> requestToTagApi(@Path("usersIds") String usersIds, @Query("page") Long page);
+    Call<ResponseTagApiDto> requestToTagApi(@Path("usersIds") String usersIds,
+                                            @Query("page") Long page);
 }

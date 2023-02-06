@@ -1,6 +1,5 @@
 package api.parser.app.service.impl;
 
-
 import api.parser.app.dto.ResponseTagApiDto;
 import api.parser.app.dto.ResponseUserApiDto;
 import api.parser.app.dto.TagApiDto;
@@ -10,13 +9,16 @@ import api.parser.app.model.User;
 import api.parser.app.service.UserParseService;
 import api.parser.app.util.ApiRequestConfig;
 import api.parser.app.util.ApiRequestUtil;
-import retrofit2.Response;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import retrofit2.Response;
 
 public class UserParseServiceImpl implements UserParseService {
     public static final String JOINER = ";";
@@ -29,8 +31,6 @@ public class UserParseServiceImpl implements UserParseService {
     public static final int REQUEST_QUOTA_MAX = 25;
     public static final int DELAY_TIME = 60;
     public static final int MAX_PARAM_LENGTH = 20;
-
-
     private final UserDtoMapper userDtoMapper;
 
     public UserParseServiceImpl(UserDtoMapper userDtoMapper) {
@@ -94,7 +94,8 @@ public class UserParseServiceImpl implements UserParseService {
                 if (tags.body() != null) {
                     usersTags = new HashMap<>(collectTags(tags.body()));
                 }
-                while (tags.body() != null && tags.body().isHasMore() && pageNumber < REQUEST_QUOTA_MAX) {
+                while (tags.body() != null && tags.body().isHasMore()
+                            && pageNumber < REQUEST_QUOTA_MAX) {
                     if (pageNumber > 2) {
                         usersTags.putAll(collectTags(tags.body()));
                     }
@@ -115,7 +116,7 @@ public class UserParseServiceImpl implements UserParseService {
         int startSize = 0;
         int maxSize = 0;
         int count = (int) Math.ceil(size / (double) MAX_PARAM_LENGTH);
-        for(;count > 0;count--) {
+        for (;count > 0;count--) {
             maxSize += Math.min(size, MAX_PARAM_LENGTH);
             usersIds.add(IntStream.range(startSize, maxSize)
                     .mapToObj(users::get)

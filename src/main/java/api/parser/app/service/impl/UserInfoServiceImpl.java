@@ -8,7 +8,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public static final String INFO_TEMPLATE = "User name: %s, location: %s,"
             + " answer count: %d, question count: %d, tags: %s, link to profile: %s "
             + "link to avatar: %s";
-    public static final String JOINER  = ", ";
+    public static final String JOINER = ", ";
 
     @Override
     public void printInfo(List<User> users) {
